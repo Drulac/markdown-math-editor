@@ -1,0 +1,265 @@
+* {
+	/* font-size: 10px; */
+	background: white;
+	color: #2b2a2a;
+	/*vertical-align: middle;*/
+	/*font-family: Noto Sans;*/
+	font-size: 11px;
+	line-height: 1.4em;
+	/*font-family: Noto mono;*/
+}
+strong{
+	color: #32328c;
+}
+h1, h2, h3, h4, h5, h6, strong{
+	/*font-family: Noto Sans;*/
+	/*font-family: Noto Sans Mono;*/
+	-webkit-font-smoothing: subpixel-antialiased;
+}
+h1:not(.inlined), h2:not(.inlined), h3:not(.inlined), h4:not(.inlined), h5:not(.inlined), h6:not(.inlined) {
+	width: 100%;
+	display: flex;
+}
+
+br.img ~ br.img, span.img + br{
+	display:none;
+}
+ul {
+    list-style-type: none;
+    display: table;
+}
+li:before {
+	content: '-';
+	margin-left: -20px;
+	margin-right: 7.5px;
+	font-weight: 900;
+	overflow: hidden;
+	display: inline;
+	position: relative;
+}
+svg {
+	/* border: solid 1px #c6c6c6; */
+	margin-top: 2px;
+	position: relative;
+	/*top: calc(-1em / 2.5); */
+	top:1px;
+	padding: 2px;
+	background: #eeeeee;
+}
+h1{
+	margin-top: 5em;
+	font-size:16px;
+}
+h2{
+	margin-top: 3em;
+	font-size:12px;
+}
+h3, h4, h5, h6{
+	margin-top: 2.5em;
+}
+body{
+	margin: 0px auto;
+	padding: 1.25cm;
+	width: 21cm;
+	box-sizing: border-box;
+}
+html {
+	background: #e5e5e5;
+}
+br.img, br.returnLine{
+	display: table;
+	width: 100%;
+	content: '\A';
+}
+span.img{
+	max-width:100%;
+	float: left;
+	display: table;
+	border: solid 1px #c6c6c6;
+	text-align: center;
+	margin-right: 10px;
+	font-style: italic;
+	color: #141414;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	box-sizing: border-box;
+}
+img{
+	max-width: 100%;
+	width: auto;
+	display: block;
+	border-top-color: #c6c6c6 !important;
+	/*float: left;
+	margin-right: 10px;
+	border: solid 1px #c6c6c6;*/
+}
+img.alted{
+	margin-top: 10px;
+	border-top: solid 1px;
+}
+div{
+	page-break-inside:avoid;
+}
+.break{
+	page-break-before:always;
+	border-top: dashed 1px lightgray;
+	display: inline-block;
+	width: 100%;
+}
+*:has(> img) {
+	margin:auto;
+	text-align:center;
+}
+table {
+	  border-collapse: collapse;
+}
+
+table, th, td {
+	border: 1px solid #2b2a2a;
+}
+td {
+	padding: 4px 7.5px;
+	text-align: center;
+}
+thead{
+	text-transform: capitalize;
+}
+thead th {
+	background-color: #EEEEEE;
+}
+.overline {
+	background: yellow;
+	text-decoration: background red;
+	width: fit-content;
+	width: -moz-fit-content;
+}
+.conversion-error {
+	display: inline;
+	background: red;
+	padding: 7.5px;
+	color: white;
+	border-radius: 5px;
+}
+
+foreignObject, .foreignObject{
+	display:inline;
+}
+
+math, .math{
+	/*margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateY(-50%) translateX(-50%);
+	vertical-align:unset;
+	width: 100%; */
+	/*margin-left: auto;
+	margin-right: auto;
+	display: block;
+	margin-top: auto;
+	margin-bottom: auto;
+	vertical-align: middle;*/
+	/* margin: auto; */
+	/*position: absolute;
+	top: calc(50% - 2px);
+	left: calc(50% - 2px);
+	transform: translateY(-50%) translateX(-50%);*/
+	/*transform: translate3d(-50%, -50%, 0);*/
+	/*-webkit-transform: translateY(-50%) translateX(-50%);
+	-webkit-transform: translate3d(-50%, -50%);*/
+	display:inline;
+	border: solid 1px #c6c6c6;
+	padding: 7.5px;
+}
+math, math *{
+	font-family: "Latin Modern Math", "STIX Two Math", "XITS Math", "STIX Math", "Libertinus Math", "TeX Gyre Termes Math", "TeX Gyre Bonum Math", "TeX Gyre Schola", "DejaVu Math TeX Gyre", "TeX Gyre Pagella Math", "Asana Math", "Cambria Math", "Lucida Bright Math", "Minion Math", STIXGeneral, STIXSizeOneSym, Symbol, "Times New Roman", serif;
+	font-weight:normal;
+	text-decoration:none;
+	font-style: normal;
+}
+mo, mn, mi, mtext{
+	font-size: 12px;
+	/* font-family: Lato !important; */
+	font-family: DejaVu Math TeX Gyre !important;
+}
+
+.menu {
+	width: 120px;
+	box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+	position: relative;
+	display: none;
+
+	.menu-options {
+		list-style: none;
+		padding: 10px 0;
+
+		.menu-option {
+			font-weight: 500;
+			font-size: 14px;
+			padding: 10px 40px 10px 20px;
+			cursor: pointer;
+
+			&:hover {
+				background: rgba(0, 0, 0, 0.2);
+			}
+		}
+	}
+}
+
+
+@media print {
+	@page {
+		size: A4; /* DIN A4 standard, Europe */
+		margin:1.25cm;
+	}
+	div{
+		page-break-inside: auto;
+	}
+	.img, img{
+		page-break-inside: avoid;
+	}
+	html{
+		background:white;
+		margin:0;
+		padding:0;
+		/*overflow: hidden !important;
+		height: calc(297mm - 2 * 1.25cm);*/
+		width: 210mm;
+		max-height: 100%;
+	}
+	body{
+		margin: 0;
+		box-sizing: border-box;
+		padding:0;
+		overflow:visible;
+		overflow-y: auto !important;
+		/*max-height: 100%;*/
+		border:none;
+	}
+	break{
+		border-top:solid 0px red;
+		display: none;
+	}
+
+	* {     
+		background: white;
+		color: #2b2a2a;
+	}
+	*:not(strong, em) {
+		vertical-align: middle;
+	}
+	svg {   
+		border: solid 1px #c6c6c6;
+		margin-top: 2px;
+		position: relative;
+		top: calc(-1em / 2.5);
+		padding: 0 2px;
+		vertical-align: middle;
+	}
+	h1{     
+		font-size:16px;
+	}
+	h2{     
+		font-size:12px;
+	}
+}
