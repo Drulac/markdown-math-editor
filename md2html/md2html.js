@@ -1,4 +1,4 @@
-module.exports = (mmlN) => {
+module.exports = async () => {
 	console.time('load')
 	console.time('load0')
 	const unified = require('unified')
@@ -23,6 +23,7 @@ module.exports = (mmlN) => {
 	const convertFormule = require('./mathml/convertFormule.js')
 	console.timeEnd('load2')
 	console.time('load3')
+	const mmlN = await require('./mathml/mathjax.js')()
 	//const mmlN = await require('./mathjax.js')
 	//const a2h = require(path.resolve('./MathJax-demos-node/direct/am2chtml.js'))
 	console.timeEnd('load3')

@@ -5,120 +5,13 @@ const style = fs
 	.readFileSync(__dirname + '/front/style.css', 'utf-8')
 	.toString()
 
-body = `<html>
-<body onscroll="console.log('have scrolled');	document.title = JSON.stringify([window.pageYOffset, (window.innerHeight + window.scrollY + 10) >= document.body.offsetHeight])">
-
-<style>body{border-left:solid 1px #c6c6c6;} ${style}</style>
-
-<script>
-function insertAfter(newNode, referenceNode) {
-	try{
-		referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling)
-	}catch(err){
-		console.error(err)
-	}
-}
-
-async function waitElement(selector) {
-	try{
-		const querySelector = document.querySelector(selector)
-		if (querySelector === null) {
-			//return await waitElement(selector)
-			return document.querySelector('#init')
-		}
-
-		return querySelector
-	}catch(err){
-		console.log(err)
-		return document.querySelector('#init')
-	}
-}
-function removeFirstInlinedTitleMargin(){
-	return Array.from(document.querySelectorAll('p'))
-	.filter(p=>Array.from(p.querySelectorAll('.img')).length !== 0)
-	.filter(p=>p.isSameNode(p.parentNode.lastElementChild))
-	.map(p=>p.parentNode.nextElementSibling)
-	.filter(div=>div !== null && div.childNodes.length >= 2)
-	.map(div=>div.childNodes[1])
-	.filter(el=>el.classList.contains('inlined'))
-	.map(title=>{
-		title.style['margin-top'] = '0'
-		return title
-	})
-}
-
-const rq = (url)=>new Promise((resolve, reject)=>{
-	const xmlhttp = new XMLHttpRequest()
-
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == XMLHttpRequest.DONE) {	// XMLHttpRequest.DONE == 4
-			if (xmlhttp.status == 200) {
-				resolve(xmlhttp.responseText)
-			}else if (xmlhttp.status == 400) {
-				reject('There was an error 400')
-			}else{
-				reject('something else other than 200 was returned')
-			}
-		}
-	}
-
-	xmlhttp.open("GET", url, true)
-	xmlhttp.send()
-})
-
-/*
-let contextMenuSrc = null
-window.addEventListener("contextmenu", e => {
-console.log(e)
-contextMenuSrc = e.srcElement
-})
-*/
-
-
-
-window.addEventListener('load', ()=>{
-	const menu = document.querySelector(".menu")
-	let menuVisible = false
-
-	const toggleMenu = command => {
-		menu.style.display = command === "show" ? "block" : "none"
-		menuVisible = !menuVisible
-	}
-
-	const setPosition = ({top, left}) => {
-		menu.style.left = left+'px'
-		menu.style.top = top+'px'
-		toggleMenu("show")
-	}
-
-	window.addEventListener("click", e => {
-		if(menuVisible) toggleMenu("hide")
-	})
-
-	/*window.addEventListener("contextmenu", e => {
-		if(e.srcElement.tagName.toLowerCase() === 'img')
-		{
-			e.preventDefault()
-			const origin = {
-				left: e.pageX,
-				top: e.pageY
-			}
-			setPosition(origin)
-			return false
-		}
-	})*/
-})
-
-
-</script>
-<div class="menu">
-	<ul class="menu-options">
-		<li class="menu-option">Ouvrir</li>
-		<li class="menu-option">Ouvrir avec Gimp</li>
-		<li class="menu-option">Copier l'adresse</li>
-	</ul>
-</div>
-<div id="init"></div>`
+const body = eval(
+	'`' +
+		fs
+			.readFileSync(__dirname + '/front/body.html', 'utf-8')
+			.toString() +
+		'`'
+) //require body and inject inside the css style
 
 /*
  * A basic node-gtk Webkit based browser example.
@@ -200,7 +93,7 @@ Object.getOwnPropertyNames(colors).forEach((id) => {
 
 terminal.setInputEnabled(true)
 
-console.log('before webview')
+//console.log('before webview')
 
 /*const termStyle = terminal.getStyle()
 termStyle.
@@ -236,7 +129,7 @@ console.log('after screen')
 vbox.packStart(terminal, true, true, 0)
 vbox.packStart(toolbar, false, false, 0)
 
-console.log('before buttons')
+//console.log('before buttons')
 
 const button = {
 	print: Gtk.ToolButton.newFromStock(Gtk.STOCK_PRINT),
@@ -557,7 +450,7 @@ webView.on('load-changed', (loadEvent) => {
 // configure buttons actions
 //button.refresh.on('clicked', webView.reload)
 
-console.log('before show')
+//console.log('before show')
 
 window.on('show', async () => {
 	// bring it on top in OSX
@@ -595,7 +488,7 @@ window.on('show', async () => {
 		//	console.log('before work')
 		//setInterval(() => console.log('new interval after work'), 5000)
 
-		engine = require('./md2html/script.js')(filename, true)
+		engine = require('./md2html/engine.js')(filename, true)
 		let previousScrolling = 0
 
 		let stack = []

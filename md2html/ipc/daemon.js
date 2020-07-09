@@ -44,8 +44,7 @@ function MakeQuerablePromise(promise) {
 	return result
 }*/
 
-	const mmlN = await require('../mathml/mathjax.js')()
-	const md2html = require('../md2html.js')(mmlN)
+	const md2html = await require('../md2html.js')()
 
 	const isLoad = async () => {
 		if (md2html === 'wait-for-load') {
