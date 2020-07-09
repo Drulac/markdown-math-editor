@@ -1,7 +1,7 @@
 {
   "name": "markdown-math-editor",
   "version": "1.0.0",
-  "description": "markdown editor sing neovim as editor with lot of features like asciiMath support",
+  "description": "markdown editor using neovim as editor with lot of features like asciiMath support",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
