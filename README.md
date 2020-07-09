@@ -6,6 +6,7 @@ markdown editor using neovim as editor with lot of features like asciiMath suppo
 ```bash
 git clone https://github.com/Drulac/markdown-math-editor.git
 cd markdown-math-editor
+npm install
 node script.js file.md
 ```
 ## to use with
