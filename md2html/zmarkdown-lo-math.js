@@ -1,11 +1,13 @@
 const path = require('path')
 const filename = path.resolve(process.argv[2])
 
+const surcoucheTable = require('surcouche-remark-grid-table')
 const clone = require('clone')
+
 // 1. Require the "common" module
 const zmarkdown = require('zmarkdown/common')
 
-// Clone our configuration (or use your own)
+// Clone our configuration
 const yourMdastConfig = clone(
 	require('zmarkdown/config/mdast')
 )
@@ -43,10 +45,6 @@ const parser = zmarkdown(
 	yourMdastConfig,
 	yourHtmlConfig
 )
-
-//console.log(yourHtmlConfig)
-
-const surcoucheTable = require('surcouche-remark-grid-table')
 
 module.exports = (md) => {
 	md = md
@@ -88,7 +86,3 @@ module.exports = (md) => {
 	//async
 	return parser(md)
 }
-
-/*parser('$L = {1} over {2} * rho v^2 S C_L$').then(
-	console.log
-)*/

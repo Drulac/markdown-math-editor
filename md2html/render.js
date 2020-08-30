@@ -90,8 +90,8 @@ module.exports = async function (
 
 	chunks = chunks
 		.map((e) => ({ content: e }))
+		//important because not async
 		.filter((e, id) => {
-			//important because not async
 			const old = memory.findIndex(
 				(m) =>
 					typeof m !== 'undefined' &&
@@ -111,10 +111,8 @@ module.exports = async function (
 				return true
 			}
 		})
+		//important because async
 		.map(async (e, id) => {
-			//important because async
-			console.log(e.oldId + ' :> ' + e.id)
-
 			const zmarkdownResult = await md2html(e.content)
 				.then((res) => {
 					res = new Object(res)
