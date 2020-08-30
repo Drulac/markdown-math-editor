@@ -40,13 +40,14 @@ You can configure your desktop manager to open all `*.md` files with this editor
 - Complexe math formule support with [asciiMath syntax](http://asciimath.org/) and with `$$` and `$` as delimiters
 - Molecule drawing support with [SMILES syntax](https://fr.wikipedia.org/wiki/Simplified_Molecular_Input_Line_Entry_Specification) with `€€` and `€` as delimiters
 - Simple and efficient Tables syntax
+- HTML & PDF export
 - Double click on a picture to edit in Gimp
 
 ## syntax
 
 see (_in the editor_) [sample.md](sample.md)
 
-
+![](screenshoot.png)
 
 ## to use with
 
