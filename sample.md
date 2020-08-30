@@ -62,19 +62,27 @@ Pour faire un [lien](http://www.zestedesavoir.com "Zeste de Savoir") sur un morc
 
 Pour nous contacter, cliquez [ici](mailto:contact@monsite.com).
 
+# Maths
+
+La syntaxe des maths est grosso modo de l'[AsciiMath](https://asciimath.org/) je vous invite à utiliser ça comme doc pour les maths, c'est assez facile à comprendre
+
+Les maths s'écrivent entourés de signes dollars `$` :
+- un seul dollar `$a+b^2$` : $a+b^2$
+- deux dollar `$$a+b^2$$` : $$a+b^2$$
+
+$$sum_3^A$$
+
+$$sum_(i=1)^n i^3=((n(n+1))/2)^2$$
+
+il y a quelques ajouts à la syntaxe de base, notamment `over` : `{A} over {B}` va donner $${A} over {B}$$
+
 $$L = {1} over {2} * rho v^2 S C_L$$
 
-Nom     |   Age
-------|-----
-Fred |   39
-Sam |   38
-Alice  |   35
-Mathilde  | 35
+# syntaxes des tableaux
 
-# tables syntaxes
+## Syntaxe simple
 
-## quick
-
+pas besoin de tout aligner parfaitement, **fait gagner beaucoup de temps**
 not need to align everything perfectly, **save a lot of time**
 
 -------------------
@@ -89,7 +97,7 @@ Alice     |   35
 Mathilde  | 35
 -------------------
 
-possible to create **multi-lines cells**
+possibilité de créer des **cellules multi-lines**
 
 -------------------
 Nom    |   Age
@@ -102,10 +110,10 @@ Alice     |   35
 Mathilde  | 
 -------------------
 
-possible to create **multi-rows cells**
+possibilité de créer des **cellules multi-colonnes**
 
-`#` char make the cell $+1$ row width
-_the last cel of the line take extra space if there is, like the last 2 lines_
+le caractère `#` augmente la largeur de la cellule d'une colonne
+_La dernière cellule d'une ligne prends la place restante s'il y en a, comme le font les cellules des 2 dernières lignes_
 
 ----------------------------
 Nom    |   Age | play music
@@ -122,11 +130,11 @@ Fred    |    39
 
 
 
-## Another quick table syntaxe
+## Une autre syntaxe simple
 
-Less powerfull
+Moins puissante
 
-_need to align everything perfectly_
+_pas besoin de tout aligner parfaitement_
 
 Nom     |   Age
 ------|-----
@@ -137,9 +145,11 @@ Mathilde  | 35
 Table: Tableau des âges
 
 
-## complex table syntaxe
+## Syntaxe complexe
 
-Complex table syntaxe allow crazy things like the `spans` words wich is on 2 rows, but require everythings to be well aligned, so **take a lot of time to write and edit**
+La syntaxe complexe permet de faire des choses folles comme le mot `spans` qui est sur deux lignes, mais nécessite que tout soit parfaitement alignés, **ce qui prends beaucoup de temps à écrire et à éditer**
+
+The complexe syntaxe allow crazy things like the `spans` words wich is on 2 rows, but require everythings to be well aligned, so **take a lot of time to write and edit**
 
 +-------+----------+------+
 | Table Headings   | Here |
@@ -208,6 +218,8 @@ Utilisez ||Ctrl|| + ||Shift|| + ||V|| pour coller.
 
 :p :euh:
 
+# Balises spéciales
+
 [[information]]
 | Ceci est une balise d'information.
 |
@@ -227,10 +239,13 @@ Source: Citez vos sources !
 |
 | Cool, non ?
 
+$pi$
+
 
 Bienvenue sur ZdS !
 
 *[ZdS]: Zeste de Savoir
+
 
 Markdown[^mdown] est une syntaxe légère d'écriture de documents. Pandoc[^pandoc] est un convertisseur de documents.
 

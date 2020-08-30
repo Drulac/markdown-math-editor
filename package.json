@@ -17,7 +17,7 @@
     "rehype-lo-math": "^1.0.2",
     "rehype-smiles": "^1.0.3",
     "remark-attr": "^0.11.1",
-    "remark-change-image-paths": "^1.0.0",
+    "remark-change-image-paths": "^1.0.1",
     "remark-smiles": "^1.0.4",
     "small-events-manager": "^1.0.0",
     "surcouche-remark-grid-table": "0.0.1",

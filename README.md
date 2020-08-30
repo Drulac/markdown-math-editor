@@ -1,5 +1,5 @@
 # markdown-math-editor
-markdown editor using neovim as editor with lot of features like asciiMath support
+markdown editor using neovim as editor with lot of features like [asciiMath syntax](http://asciimath.org/) support, chemical molecule drawing (based on [SMILES syntax](https://fr.wikipedia.org/wiki/Simplified_Molecular_Input_Line_Entry_Specification))
 
 ## requierements
 
@@ -32,12 +32,19 @@ then to open a file with the editor run :
 markdown-math-editor file.md
 ```
 
+You can configure your desktop manager to open all `*.md` files with this editor
 
-## how to use
 
-### syntax
+## features
 
-see [sample.md](sample.md)
+- Complexe math formule support with [asciiMath syntax](http://asciimath.org/) and with `$$` and `$` as delimiters
+- Molecule drawing support with [SMILES syntax](https://fr.wikipedia.org/wiki/Simplified_Molecular_Input_Line_Entry_Specification) with `€€` and `€` as delimiters
+- Simple and efficient Tables syntax
+- Double click on a picture to edit in Gimp
+
+## syntax
+
+see (_in the editor_) [sample.md](sample.md)
 
 
 

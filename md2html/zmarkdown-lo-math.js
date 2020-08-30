@@ -34,8 +34,6 @@ yourMdastConfig.emoticons.emoticons = Object.entries(
 	return acc
 }, [])
 
-console.log(yourMdastConfig.emoticons.emoticons)
-
 // 3. Use your plugin instead
 yourMdastConfig.extraPlugins = {}
 
@@ -44,7 +42,7 @@ yourHtmlConfig.extraPlugins = {
 	'rehype-smiles': require('rehype-smiles'),
 	'lo-math': require('rehype-lo-math'),
 	'remark-attr': require('remark-attr'),
-	'remark-change-image-paths': require('../../remark-change-image-paths')(
+	'remark-change-image-paths': require('remark-change-image-paths')(
 		{
 			//search: /^(?!smileys\/)/,
 			search: /^(?!smileys\/|\/)/,
