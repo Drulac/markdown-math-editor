@@ -101,6 +101,9 @@ img.alted{
 	margin-top: 10px;
 	border-top: solid 1px;
 }
+figure:has(img) {
+	margin: 0;
+}
 div{
 	page-break-inside:avoid;
 }
@@ -128,7 +131,7 @@ td {
 thead{
 	text-transform: capitalize;
 }
-thead th {
+thead th, thead th p {
 	background-color: #EEEEEE;
 }
 .overline {
@@ -172,8 +175,8 @@ math, .math{
 	/*-webkit-transform: translateY(-50%) translateX(-50%);
 	-webkit-transform: translate3d(-50%, -50%);*/
 	display:inline;
-	border: solid 1px #c6c6c6;
-	padding: 7.5px;
+	/*border: solid 1px #c6c6c6;
+	padding: 7.5px;*/
 }
 math, math *{
 	font-family: "Latin Modern Math", "STIX Two Math", "XITS Math", "STIX Math", "Libertinus Math", "TeX Gyre Termes Math", "TeX Gyre Bonum Math", "TeX Gyre Schola", "DejaVu Math TeX Gyre", "TeX Gyre Pagella Math", "Asana Math", "Cambria Math", "Lucida Bright Math", "Minion Math", STIXGeneral, STIXSizeOneSym, Symbol, "Times New Roman", serif;

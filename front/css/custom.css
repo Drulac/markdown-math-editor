@@ -1,0 +1,145 @@
+h3:hover span.icon-link:after, h4:hover span.icon-link:after, h5:hover span.icon-link:after, h6:hover span.icon-link:after {
+	display: none;
+}
+
+* {
+	font-family: Cantarell !important;
+}
+.main .content-container .article-content figure>img{
+	margin: 0 0;
+}
+
+html{
+	border-left: solid 1px #c6c6c6;
+	height: -webkit-fit-content;
+}
+
+body {
+	background: #fff;
+	font-size: 1.3rem;
+	line-height: 1.5em;
+	margin-top:-1em;
+	overflow-y: auto;
+}
+
+.main .content-container h1, .main .content-container h2 {
+	border-bottom: none;
+}
+
+.main .content-container .article-content h2, .main .content-container .message-content h2 {
+	border-top: none;
+}
+
+b, strong {
+	color: rgb(31, 46, 136);
+}
+
+.main {
+	display:block;
+	background: #fbfbfb;
+}
+
+#content {
+	width: 21cm;
+	margin: auto;
+	background: white;
+	padding-right: 1em;
+	padding-top: 1em;
+	box-sizing: border-box;
+}
+
+.table-wrapper {
+}
+
+.hljs-code-div{
+}
+
+.hljs {
+	background: #f7f7f7;
+}
+
+.main .content-container .article-content figure, .main .content-container .message-content figure, .article-content img:not(.article-content figure img):not(.smiley){
+	max-width: 100%;
+	border: solid 1px #c6c6c6;
+	display: inline-block;
+	text-align: center;
+	float:left;
+	margin:0;
+	margin-bottom: 1em;
+	box-sizing:border-box;
+}
+.main .content-container .article-content figure figcaption, .main .content-container .message-content figure figcaption{
+	max-width:100%;
+	float: left;
+	display: contents;
+	width:100%;
+	border-bottom: solid 1px #c6c6c6;
+	text-align: center;
+	font-style: italic;
+	color: #141414;
+	box-sizing: border-box;
+	font-size: larger;
+}
+.main .content-container .article-content img:not(.smiley), .main .content-container .message-content img:not(.smiley){
+	max-width: 100%;
+	/* width: auto; */
+	display: block;
+	border-top-color: #c6c6c6 !important;
+	/*float: left;*/
+	border-top: solid 1px #c6c6c6;
+	box-sizing: border-box;
+}
+
+.content-container *:not(figure) > img:not(.smiley){
+	margin-right: 1em !important;
+	margin-bottom: 1em !important;
+	box-sizing:content-box; /* important pour faire la même largeur que les figure */
+}
+
+.main .content-container .article-content .custom-block, .main .content-container .message-content .custom-block {
+	display: inline-block;
+	width:calc(100% - 1em);
+}
+
+#content > section > div > * {
+	margin-right: 1em;
+}
+
+#content ul {
+	display: table;
+}
+
+h1:not(.inlined), h2:not(.inlined), h3:not(.inlined), h4:not(.inlined), h5:not(.inlined), h6:not(.inlined) {
+	width: 100%;
+	display: flex;
+}
+
+.main .content-container .article-content h2, .main .content-container .article-content h2 a, .main .content-container .article-content h3, .main .content-container .article-content h3 a, .main .content-container .message-content h2, .main .content-container .message-content h2 a, .main .content-container .message-content h3, .main .content-container .message-content h3 a{
+	margin-top: 1em;
+}
+
+div{
+	page-break-inside:avoid;
+}
+.break{
+	page-break-before:always;
+	border-top: dashed 1px lightgray;
+	display: inline-block;
+	width: 100%;
+}
+
+svg {
+	padding-bottom: 2px;
+	position: relative;
+	top: 2px;
+}
+
+.math-display > span > mjx-container > svg{
+	border: solid 1px #c6c6c6;
+	padding: 2px;
+}
+
+span.mathjax {
+	display:inline-block;
+}
+

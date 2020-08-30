@@ -1,18 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs')
 
-const style = fs
-	.readFileSync(__dirname + '/front/style.css', 'utf-8')
-	.toString()
-
-const body = eval(
-	'`' +
-		fs
-			.readFileSync(__dirname + '/front/body.html', 'utf-8')
-			.toString() +
-		'`'
-) //require body and inject inside the css style
-
 /*
  * A basic node-gtk Webkit based browser example.
  * Similar logic and basic interface found in this PyGTK example:
@@ -49,7 +37,7 @@ const window = new Gtk.Window({
 
 window.setTitle(path.dirname(filename).split('/').pop())
 
-console.log('title set')
+//console.log('title set')
 
 function getAllFuncs(obj) {
 	let methods = []
@@ -149,38 +137,9 @@ Object.getOwnPropertyNames(button).forEach((id) =>
 	toolbar.add(button[id])
 )
 
-const dblclick = `async (e)=>{
-	const result = await rq('http://127.0.0.1:3045/open/' + encodeURIComponent(JSON.stringify({file: img.src.replace('file://', '')})))
-	.catch(console.error)
-
-	console.log(result)
-}`
-
 button.reloadImages.on('clicked', () => {
-	const code = `
-	(()=>{
-		scrollState = window.pageYOffset
-		d = new Date()
-		const s = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
-
-		Array.from(document.querySelectorAll('img')).forEach(e=>{
-			window.URL.revokeObjectURL(e.src)
-
-			let img = document.createElement('img')
-			/*img.onload = ()=>{
-				console.log('image fully loaded, scrolling to previous scrollState')
-				window.scrollTo(0, scrollState)
-			}
-			img.addEventListener('load', img.onload);*/
-			img.src = e.src+'?t='+d.getTime()
-			if(e.classList.contains('alted')) img.classList.add('alted')
-			img.style = e.style
-			img.ondblclick = ${dblclick}
-			e.src = s //trick to clean cache
-			e.parentNode.insertBefore(img, e)
-			e.parentNode.removeChild(e)
-			setTimeout(()=>{e = null}, 1000) //trick to clean cache
-		})
+	const code = `(()=>{
+		mde.reloadImages()
 	})()`
 
 	webView.runJavascript(code, null, () => {}, {})
@@ -245,12 +204,14 @@ const htmlExport = () =>
 
 		console.log(htmlFilename)
 
-		//let wb = webView.get
+		const body = fs
+			.readFileSync(__dirname + '/front/body.html', 'utf-8')
+			.toString()
 
 		const html =
 			body +
 			(await engine.exportForOtherBrowsers()) +
-			'</body></html>'
+			'</main></body></html>' //TODO : Beurkkkkkkk   beautify that shit
 
 		fs.writeFile(htmlFilename, html, (err) => {
 			if (err) throw err
@@ -494,108 +455,39 @@ window.on('show', async () => {
 		let stack = []
 
 		engine.on('append', (output) => {
-			const code = `(async ()=>{
-				const wrapper= document.createElement('div');
-				wrapper.innerHTML= ${JSON.stringify(output.output)}
-
-				Array.from(wrapper.querySelectorAll('span.img + br + br + span.img')).forEach(e=>{
-					e.parentNode.removeChild(e.previousElementSibling)
-					e.parentNode.removeChild(e.previousElementSibling)
-				})
-				/*Array.from(wrapper.querySelectorAll('img')).map(e=>e.parentNode).forEach(e=>{
-					const br = document.createElement('br')
-					br.style = "display: table; width: 100%; content: '\A';"
-					e.parentNode.insertBefore(br, e)
-				})
-				
-				
-				Array.from(wrapper.querySelectorAll('img')).forEach(img=>{
-					const span = document.createElement('span')
-					span.textContent = img.getAttribute('alt')
-					if(span.textContent === '0'){
-						span.textContent = ''
-						img.style['margin-top'] = '0px'
-					}
-					span.setAttribute('width', img.getAttribute('width'))
-					img.setAttribute('width', 'auto')
-
-					img.parentNode.appendChild(span)
-					span.appendChild(img)
-					span.style = "max-width:100%; float: left; display: table;border: solid 1px #c6c6c6; text-align: center; margin-right: 10px; font-style: italic; color: #141414;"
-				})*/
-				
-
-				insertAfter(wrapper.firstChild, await waitElement('#${
-					output.beforeId
-				}'))
-				
-				
-			})()`
-			stack.push(code)
-			//webView.runJavascript(code, null, output.cb, {})
+			stack.push([
+				'append',
+				{
+					output: output.output,
+					beforeId: output.beforeId,
+				},
+			])
 		})
 
 		engine.on('delete', (keepIds) => {
 			console.log('delete', keepIds)
 
-			const code = `(async ()=>{
-				const keepIds = ${JSON.stringify(keepIds)}
-				console.log('delete', keepIds)
-
-				Array.from(document.querySelectorAll('body > div:not(#init)')).forEach(el=>{
-					if(!keepIds.includes(el.id)){
-						console.log('remove', el.id)
-						el.parentNode.removeChild(el)
-						el = null
-					}
-				})
-				
-				/*ids.forEach(id=>{
-					console.log('delete', id)
-
-					try{
-						let el = document.querySelector('#'+id)
-						el.parentNode.removeChild(el)
-						el = null
-					}catch(err){
-						console.log(err)
-					}
-				})*/
-			})()`
-			stack.push(code)
-			//webView.runJavascript(code, null, ()=>{}, {})
+			stack.push(['delete', keepIds])
 		})
 
 		engine.on('order', (tree) => {
-			const code = `(async ()=>{
-				const tree = ${JSON.stringify(tree)}
-
-				await Promise.all(tree.map(async ([e, previous], id)=>{
-					/*if(id === 0)
-						previous = 'init'
-					else
-						previous = tree[id - 1]
-*/
-					if(e === 'a4870605ca6bdb7d0174a1efe32f4604d')
-						console.log('a4870605ca6bdb7d0174a1efe32f4604d will come after', previous)
-
-					//console.log('order : ', JSON.stringify(e), JSON.stringify(previous))
-					//console.log('order : ', e, previous)
-
-					try{
-						insertAfter(
-							await waitElement('#'+e),
-							await waitElement('#'+previous)
-						)
-					}catch(err){
-						console.error(e, previous)
-						console.error(err)
-					}
-				}))
-			})()`
-			stack.push(code)
-			//webView.runJavascript(code, null, ()=>{}, {})
+			stack.push(['order', tree])
 		})
+
+		const getPreviousScrolling = () => {
+			const tmp = webView.getTitle()
+			let previousScrolling = 0
+
+			if (tmp !== '') {
+				;[previousScrolling, atEndOfPage] = JSON.parse(
+					webView.getTitle().toString()
+				)
+				if (atEndOfPage)
+					previousScrolling += Math.pow(3520, 2)
+			}
+
+			return previousScrolling
+		}
 
 		engine.on('releaseStack', async (tree) => {
 			if (autoExport === 'exportPdf') {
@@ -604,88 +496,27 @@ window.on('show', async () => {
 				process.exit()
 			}
 
-			let tmp = webView.getTitle()
-			let previousScrolling = 0
-			if (tmp !== '') {
-				;[previousScrolling, atEndOfPage] = JSON.parse(
-					webView.getTitle().toString()
-				)
-				if (atEndOfPage)
-					previousScrolling += Math.pow(3520, 2)
-			}
+			stack.push(['scrollTo', getPreviousScrolling()])
 
-			//	while(stack.length > 0)
-			//	{
 			const code = `(async ()=>{
-				console.log(Array.from(document.querySelectorAll('body > div:not(#init)')).map(el=>el.id))
-
-				${stack.map((e) => 'await ' + e + '; \n').join('')}
-				
-				Array.from(document.querySelectorAll('body > div')).map(el=>{
-					const setMarge = function(el, lvl){
-						el.style['margin-left'] = lvl*30 + 'px'
-					}
-
-					const level = parseInt(el.getAttribute('level'))-1
-					//console.log('el', el)
-					if(level < 0) level = 0
-					setMarge(el, level)
-
-					const titre = el.querySelector('h1, h2, h3, h4, h5, h6, h7, h8, h9')
-					if(titre !== null){
-						if(level > 0.5)
-							setMarge(titre, -0.5)
-						else
-							setMarge(titre, -level)
-					}
-
-					Array.from(el.querySelectorAll('img'))
-						.map(img=>img.parentNode.parentNode)
-						.concat(Array.from(
-							el.querySelectorAll('table')
-						))
-						.forEach(img=>{
-						//img.style.overflow = 'scroll'
-						if(level > 2)
-							setMarge(img, -2)
-						else
-							setMarge(img, -level)
-					})
-
-
-				})
-
-				Array.from(document.querySelectorAll('img')).forEach(img=>{
-					img.ondblclick = ${dblclick}
-				})
-				
-				removeFirstInlinedTitleMargin()
+				console.log('code executed')
+				await mde.releaseStack(${JSON.stringify(
+					stack.map((e) => e)
+				)})
 
 			})()`
+
+			//console.log(code)
 
 			stack = []
 
 			await new Promise((resolve, reject) =>
 				webView.runJavascript(code, null, resolve, {})
 			)
-			//}
-
-			const cde = `(()=>{
-				console.log('scrollTo'+${previousScrolling})
-				window.scrollTo(0, ${previousScrolling})
-			})()`
-			webView.runJavascript(cde, null, () => {}, {})
 		})
 
 		engine.on('render', (output) => {
-			let tmp = webView.getTitle()
-			if (tmp !== '') {
-				;[previousScrolling, atEndOfPage] = JSON.parse(
-					webView.getTitle().toString()
-				)
-				if (atEndOfPage)
-					previousScrolling += Math.pow(3520, 2)
-			}
+			const previousScrolling = getPreviousScrolling()
 
 			lastRender = output
 			/*webView.runJavascript(
@@ -704,15 +535,17 @@ window.on('show', async () => {
 					`<script>window.onload = ()=>{ console.log('scrollTo'+${previousScrolling}); window.scrollTo(0, ${previousScrolling})}
 					(function(){
 let level = 0
-return Array.from(document.querySelectorAll('body > *')).map(el=>{
+return Array.from(document.querySelectorAll('#content > section > div:not(#init):not([level="0"])')).map(el=>{
 	const setMarge = (lvl) =>{
 		if(lvl < 0) lvl = 0
 		el.style['margin-left'] = (parseInt(el.style['margin-left'].replace('px', '') || 0) + lvl*30) + 'px'
 	}
 
+	    const level' = parseInt((div.querySelector('h1,h2,h3,h4,h5,h6') || {tagName:'h1'}).tagName.slice(1))
+
 	if(typeof el.classList !== 'undefined' && el.classList.contains('break')){
-	}else if(/h[1-9]/.test(el.tagName.toLowerCase())){
-		level = parseInt(el.tagName.toLowerCase().replace('h', '')) - 1
+	}else{// if(/h[1-9]/.test(el.tagName.toLowerCase())){
+		//level = parseInt(el.tagName.toLowerCase().replace('h', '')) - 1
 		setMarge(level-0.5)
 	}else if(el.tagName.toLowerCase() === 'p' && Array.from(el.childNodes).length > 0 && typeof Array.from(el.childNodes)[0] === 'object' && typeof Array.from(el.childNodes)[0].tagName !== 'undefined' && Array.from(el.childNodes)[0].tagName.toLowerCase() === 'img'){
                 setMarge(level-1.5)
@@ -742,16 +575,19 @@ return Array.from(document.querySelectorAll('body > *')).map(el=>{
 				() => {
 					console.log('setup')
 
-					//to correct nvim size bug
+					//TODO : correct nvim size bug, actually not working
+					window.unmaximize()
+					window.maximize()
 					window.unmaximize()
 					window.maximize()
 				}
 			)
 			terminal.setFontScale(0.8)
 
-			webView.loadHtml(
-				body + `</body></html>`,
-				'file://' + filename
+			webView.loadUri(
+				//	body + `</section></main></div></body></html>`,
+				//'file://' + filename
+				'file://' + __dirname + '/front/body.html'
 			)
 		})
 	}, 1000)

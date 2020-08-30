@@ -1,6 +1,6 @@
 const md5 = require('md5')
 
-const md2html = require('./ipc/server.js')
+const md2html = require('./zmarkdown-lo-math.js')
 
 function MakeQuerablePromise(promise) {
 	// Don't modify any promise that has been already modified.
@@ -41,6 +41,28 @@ module.exports = async function (
 	body = true,
 	forExport = false
 ) {
+	//inside to catch the `silent` var
+	function format(result, forExport = false) {
+		if (!forExport)
+			result = result
+				.replace(
+					/^<p>&#x3C;inlined><\/p>(\n)*<h([0-9])/g,
+					'<h$2 class="inlined"'
+				)
+				.replace(/<li>\s*<p>/gm, '<li>')
+				.replace(/<\/p>\s*<\/li>/gm, '</li>')
+				.replace(/<-{5,}\>/g, '<div class="break"></div>')
+
+		if (!silent)
+			console.log(
+				result.split('\n').slice(0, 30).join('\n')
+			)
+
+		if (!silent) console.timeEnd('render')
+
+		return result
+	}
+
 	if (!silent) console.time('render')
 
 	if (forExport)
@@ -53,7 +75,7 @@ module.exports = async function (
 		.replace(/\n[\/][\*]((\n|.)+?)[\*][\/]/gm, '')
 		.replace(/!=/gm, '≠')
 		//.replace(/^(#+ [^ ])/gm, '![]() \n\n$1')
-		.split(/^#/m)
+		.split(/^#(?=(#* ))/m)
 		.filter((e) => e !== '')
 		.map((e) =>
 			('#' + e)
@@ -94,10 +116,20 @@ module.exports = async function (
 		.map(async (e, id) => {
 			//important because async
 			console.log(e.oldId + ' :> ' + e.id)
-			e = Object.assign(
-				e,
-				await md2html(e.content).catch(console.log)
-			)
+
+			const zmarkdownResult = await md2html(e.content)
+				.then((res) => {
+					res = new Object(res)
+
+					//console.log(res)
+					return {
+						output: res.contents,
+						level: res.data.depth,
+					}
+				})
+				.catch(console.log)
+
+			e = Object.assign(e, zmarkdownResult)
 			e.unformatedOutput = e.output
 			e.output = format(e.output)
 			e.output =
@@ -120,19 +152,5 @@ module.exports = async function (
 	return {
 		newMem,
 		all: Promise.all(chunks).catch(console.log),
-	}
-	function format(result, forExport = false) {
-		if (!forExport)
-			result = result
-				.replace(/<li>\s*<p>/gm, '<li>')
-				.replace(/<\/p>\s*<\/li>/gm, '</li>')
-		if (!silent)
-			console.log(
-				result.split('\n').slice(0, 30).join('\n')
-			)
-
-		if (!silent) console.timeEnd('render')
-
-		return result
 	}
 }

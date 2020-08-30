@@ -111,8 +111,6 @@ module.exports = (filename, s = false) => {
 		async function rd(content) {
 			//TODO mutualiser code
 
-			content += '\n\n![]()' //to prevent the last image from overflow
-
 			const cpMemory = Array.from(memory)
 
 			const output = await render(
@@ -139,13 +137,6 @@ module.exports = (filename, s = false) => {
 
 			events.run('releaseStack', true)
 		}
-
-		fs.readFile(filename, async (err, content) => {
-			if (err) throw err
-
-			await rd(content)
-			console.log('first render end')
-		})
 
 		c.exportForOtherBrowsers = async () => {
 			return await render('', memory, silent, true, true)
@@ -184,6 +175,14 @@ module.exports = (filename, s = false) => {
 			if (!silent) console.log('server bound on ' + port)
 
 			events.run('load', true)
+		})
+
+		fs.readFile(filename, async (err, content) => {
+			if (err) throw err
+
+			await rd(content)
+			await rd(content) // HACK to correct first render inlined title mis-render (style = display:block but rendered like if display:flex)
+			console.log('first render end')
 		})
 	})()
 

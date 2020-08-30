@@ -9,15 +9,21 @@
   "author": "drulac",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@h2xd/remark-change-image-paths": "^0.1.0",
+    "axios": "^0.19.2",
     "chalk": "^4.1.0",
+    "clone": "^2.1.2",
     "copy-paste": "^1.3.0",
     "deepmerge": "^4.2.2",
     "get-port": "^5.1.1",
     "mathjax": "^3.0.5",
     "md5": "^2.2.1",
     "node-gtk": "^0.4.0",
+    "pm2": "^4.4.0",
     "rehype-format": "^3.1.0",
+    "rehype-lo-math": "^1.0.2",
     "rehype-sanitize": "^3.0.1",
+    "remark-attr": "^0.11.1",
     "remark-breaks": "^1.0.5",
     "remark-embed-images": "^2.0.0",
     "remark-grid-tables": "^2.1.1",
@@ -26,7 +32,9 @@
     "sleepjs": "^4.0.1",
     "small-events-manager": "^1.0.0",
     "socket.io-with-get": "^1.2.0",
+    "surcouche-remark-grid-table": "0.0.1",
     "unified": "^9.0.0",
-    "uws-with-on.js": "^1.3.0"
+    "uws-with-on.js": "^1.3.0",
+    "zmarkdown": "^9.1.2"
   }
 }
