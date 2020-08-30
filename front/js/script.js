@@ -321,30 +321,30 @@ const mde = {
 		const s =
 			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
 
-		Array.from(document.querySelectorAll('img')).forEach(
-			(e) => {
-				window.URL.revokeObjectURL(e.src)
+		Array.from(
+			document.querySelectorAll('img:not(.smiley)')
+		).forEach((e) => {
+			window.URL.revokeObjectURL(e.src)
 
-				let img = document.createElement('img')
-				/*img.onload = ()=>{
+			let img = document.createElement('img')
+			/*img.onload = ()=>{
 				console.log('image fully loaded, scrolling to previous scrollState')
 				window.scrollTo(0, scrollState)
 			}
 			img.addEventListener('load', img.onload);*/
-				img.src = e.src + '?t=' + d.getTime()
-				if (e.classList.contains('alted'))
-					img.classList.add('alted')
-				img.style = e.style
-				img.width = e.width
-				//img.ondblclick = imgDblClick //TODO reactiver cette ligne
-				e.src = s //trick to clean cache
-				e.parentNode.insertBefore(img, e)
-				e.parentNode.removeChild(e)
-				setTimeout(() => {
-					e = null
-				}, 1000) //trick to clean cache
-			}
-		)
+			img.src = e.src + '?t=' + d.getTime()
+			if (e.classList.contains('alted'))
+				img.classList.add('alted')
+			img.style = e.style
+			img.width = e.width
+			img.ondblclick = imgDblClick
+			e.src = s //trick to clean cache
+			e.parentNode.insertBefore(img, e)
+			e.parentNode.removeChild(e)
+			setTimeout(() => {
+				e = null
+			}, 1000) //trick to clean cache
+		})
 
 		mde.releaseStack([])
 	},
