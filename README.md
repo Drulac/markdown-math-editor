@@ -18,14 +18,20 @@ apt-get install libwebkit2gtk-4.0
 
 take a look at [node-gtk install](https://github.com/romgrk/node-gtk#installing-and-building)
 
+for the moment, it may not run well on other platforms, because of it's dependencies to GTK. It's on the roadmap.
+
 ## install
 
 ```bash
-git clone https://github.com/Drulac/markdown-math-editor.git
-cd markdown-math-editor
-npm install
-node script.js file.md
+sudo npm install -g markdown-math-editor
 ```
+
+then to open a file with the editor run :
+
+```bash
+markdown-math-editor file.md
+```
+
 
 ## how to use
 
@@ -43,12 +49,18 @@ this editor was created to edit my University courses, which were in `odt` forma
 
 add markdown syntax sample and explain
 
-## warning
-
-The editor is functionnal, but the code really need to be refactored
-
 ## contribute
 
 This is a schematic explaining the current code functioning
 
 ![](markdown-math-editor.png)
+
+### install for developpement
+
+```bash
+git clone https://github.com/Drulac/markdown-math-editor.git
+cd markdown-math-editor
+npm install
+node script.js file.md
+```
+

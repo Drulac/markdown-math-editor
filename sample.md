@@ -40,9 +40,9 @@ Le mot ~~barré~~ est barré.
 
 -> Ce texte est aligné à droite. ->
 
-2^10 vaut 1024.
+$2^10$ vaut $1024$.
 
-La molécule de l'eau est H~2~O.
+La molécule de l'eau est $H_2O$.
 
 
 - Ma très belle ;
@@ -71,7 +71,75 @@ Sam |   38
 Alice  |   35
 Mathilde  | 35
 
-# split
+# tables syntaxes
+
+## quick
+
+not need to align everything perfectly, **save a lot of time**
+
+-------------------
+Nom    |   Age
+===============
+Fred    |    39
+-------------------
+Sam    |   38
+-------------------
+Alice     |   35
+-------------------
+Mathilde  | 35
+-------------------
+
+possible to create **multi-lines cells**
+
+-------------------
+Nom    |   Age
+===============
+Fred    |    39
+-------------------
+Sam    |   38
+-------------------
+Alice     |   35
+Mathilde  | 
+-------------------
+
+possible to create **multi-rows cells**
+
+`#` char make the cell $+1$ row width
+_the last cel of the line take extra space if there is, like the last 2 lines_
+
+----------------------------
+Nom    |   Age | play music
+===========================
+Melan         #| true
+----------------------------
+Sam    |   38  | No
+----------------------------
+Alice     |   35
+Mathilde  | 
+----------------------------
+Fred    |    39
+----------------------------
+
+
+
+## Another quick table syntaxe
+
+Less powerfull
+
+_need to align everything perfectly_
+
+Nom     |   Age
+------|-----
+Fred |   39
+Sam |   38
+Alice  |   35
+Mathilde  | 35
+Table: Tableau des âges
+
+
+## complex table syntaxe
+
+Complex table syntaxe allow crazy things like the `spans` words wich is on 2 rows, but require everythings to be well aligned, so **take a lot of time to write and edit**
 
 +-------+----------+------+
 | Table Headings   | Here |
@@ -90,26 +158,16 @@ Mathilde  | 35
 +-------+-----------------+
 
 
-Nom     |   Age
-------|-----
-Fred |   39
-Sam |   38
-Alice  |   35
-Mathilde  | 35
-Table: Tableau des âges
-
-
-
-------
-
+# Math
 
 $$a * x^2 + b * x + c = 0  => x = {-b +- sqrt{b^2 - 4ac}} over {2a}$$
 
 Si vous voulez écrire votre formule au sein même d'un paragraphe (comme ceci : $a \cdot x^2 + b \cdot x + c = 0$), alors n'utilisez cette fois qu'un seul caractère dollar `$` avant et après votre formule.
 
 
-# split
+# Code
 
+Sans langage : 
 ```
 #!/usr/bin/env python3
 
@@ -141,9 +199,11 @@ print "Bonjour, $nom !\n";
 
 !(http://www.youtube.com/watch?v=oavMtUWDBTM)
 
-Utilisez ||Ctrl|| + ||C|| pour copier.
+Utilisez ||Ctrl|| + ||Shift|| + ||C|| pour copier.
+Utilisez ||Ctrl|| + ||Shift|| + ||V|| pour coller.
 
-Smileys
+# Smileys
+
 :)
 
 :p :euh:

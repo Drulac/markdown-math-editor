@@ -23,17 +23,32 @@ yourHtmlConfig.disableTokenizers = {
 const imagesFolder =
 	filename.split('/').slice(0, -1).join('/') + '/'
 
+yourMdastConfig.emoticons.emoticons = Object.entries(
+	yourMdastConfig.emoticons.emoticons
+).reduce((acc, [key, value]) => {
+	acc[key] =
+		__dirname.split('/').slice(0, -1).join('/') +
+		'/front/images/smileys/svg/' +
+		value.split('/').slice(4).join('/')
+
+	return acc
+}, [])
+
+console.log(yourMdastConfig.emoticons.emoticons)
+
 // 3. Use your plugin instead
 yourMdastConfig.extraPlugins = {}
 
 yourHtmlConfig.extraPlugins = {
-	'remark-smiles': require('../../remark-math-to-smiles'),
-	'rehype-smiles': require('../../rehype-smiles'),
-	'lo-math': require('../../rehype-LO-math'),
+	'remark-smiles': require('remark-smiles'),
+	'rehype-smiles': require('rehype-smiles'),
+	'lo-math': require('rehype-lo-math'),
 	'remark-attr': require('remark-attr'),
-	'remark-change-image-paths': require('@h2xd/remark-change-image-paths')(
+	'remark-change-image-paths': require('../../remark-change-image-paths')(
 		{
-			search: '^',
+			//search: /^(?!smileys\/)/,
+			search: /^(?!smileys\/|\/)/,
+			//search: /^/,
 			replace: imagesFolder,
 		}
 	),
