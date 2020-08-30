@@ -316,7 +316,6 @@ const mde = {
 		window.scrollTo(0, previousScrolling)
 	},
 	reloadImages: function () {
-		//scrollState = window.pageYOffset
 		d = new Date()
 		const s =
 			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
@@ -327,14 +326,13 @@ const mde = {
 			window.URL.revokeObjectURL(e.src)
 
 			let img = document.createElement('img')
-			/*img.onload = ()=>{
-				console.log('image fully loaded, scrolling to previous scrollState')
-				window.scrollTo(0, scrollState)
-			}
-			img.addEventListener('load', img.onload);*/
 			img.src = e.src + '?t=' + d.getTime()
+
+			//TODO : check if still needed ? maybe should be removed
 			if (e.classList.contains('alted'))
 				img.classList.add('alted')
+			/*************/
+
 			img.style = e.style
 			img.width = e.width
 			img.ondblclick = imgDblClick
