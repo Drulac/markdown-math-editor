@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 const fs = require('fs')
-
-/*
- * A basic node-gtk Webkit based browser example.
- * Similar logic and basic interface found in this PyGTK example:
- * http://www.eurion.net/python-snippets/snippet/Webkit%20Browser.html
- */
+const util = require('util')
+const childProcess = require('child_process')
+const exec = childProcess.exec
+const spawn = childProcess.spawn
 const path = require('path')
 
 const filename = path.resolve(process.argv[2])
@@ -30,14 +28,13 @@ gi.startLoop()
 Gtk.init()
 
 console.log('initialized')
+
 // Main program window
 const window = new Gtk.Window({
 	type: Gtk.WindowType.TOPLEVEL,
 })
 
 window.setTitle(path.dirname(filename).split('/').pop())
-
-//console.log('title set')
 
 function getAllFuncs(obj) {
 	let methods = []
@@ -50,13 +47,6 @@ function getAllFuncs(obj) {
 
 const terminal = new Vte.Terminal()
 
-//const internal = require('node-gtk/lib/native.js')
-//internal.ObjectPropertySetter(terminal, 'spawn_sync', 1)
-
-//console.log(getAllFuncs(terminal))
-//console.log(getAllFuncs(new Vte.Pty()))
-//console.log(Vte)
-
 const capitalize = (s) => {
 	if (typeof s !== 'string') return ''
 	return s.charAt(0).toUpperCase() + s.slice(1)
@@ -65,7 +55,6 @@ const capitalize = (s) => {
 const colors = {
 	background: '255,255,255',
 	foreground: '43,42,42',
-	//foreground:'0,0,0',
 	bold: '0,0,0',
 }
 
@@ -76,12 +65,9 @@ Object.getOwnPropertyNames(colors).forEach((id) => {
 	terminal['setColor' + capitalize(id)](colors[id])
 })
 
+//TODO : add options to customize apparence
 //terminal.setFont(Pango.fontDescriptionFromString(''))
 //terminal.setFont(Pango.fontDescriptionFromString('Courier 10 Pitch; Normal 8'))
-
-terminal.setInputEnabled(true)
-
-//console.log('before webview')
 
 /*const termStyle = terminal.getStyle()
 termStyle.
@@ -89,12 +75,10 @@ terminal.setStyle(termStyle)*/
 
 //terminal.setSize(132, 69)
 
+terminal.setInputEnabled(true)
+
 const webView = new WebKit2.WebView()
-/*webView.on('size-allocate', rectangle => {
-	console.log('size-allocated:' + rectangle.width / 793.688)
-	console.log('zoom-level : ' + JSON.stringify(webView.getZoomLevel()))
-	webView.setZoomLevel(rectangle.width / 793.688)
-})*/
+
 const hbox = new Gtk.Box({
 	orientation: Gtk.Orientation.HORIZONTAL,
 })
@@ -105,19 +89,17 @@ const toolbar = new Gtk.Toolbar()
 
 console.log('before set zoom')
 
+//TODO : calculate zoom factor on start depending on window width
+/*webView.on('size-allocate', rectangle => {
+	console.log('size-allocated:' + rectangle.width / 793.688)
+	console.log('zoom-level : ' + JSON.stringify(webView.getZoomLevel()))
+	webView.setZoomLevel(rectangle.width / 793.688)
+})*/
+
 webView.setZoomLevel(0.86)
 
-/*
-console.log('before screen')
-
-const screen = window.getScreen()
-
-console.log('after screen')
-*/
 vbox.packStart(terminal, true, true, 0)
 vbox.packStart(toolbar, false, false, 0)
-
-//console.log('before buttons')
 
 const button = {
 	print: Gtk.ToolButton.newFromStock(Gtk.STOCK_PRINT),
@@ -145,22 +127,10 @@ button.reloadImages.on('clicked', () => {
 	webView.runJavascript(code, null, () => {}, {})
 })
 
-function filterIt(obj, searchKey) {
-	let reg = new RegExp(searchKey, 'gi')
-	return Object.getOwnPropertyNames(obj).filter(function (
-		key
-	) {
-		return key.match(reg)
-	})
-}
-//console.log(filterIt(Gdk, 'selection'))
-//window.clipboard = Gtk.Clipboard.get(Gdk.selectionClipboard)
-
 button.copy.on('clicked', () => {
 	terminal.copyClipboard()
 	const cpb = terminal.getClipboard(Gdk.SELECTION_CLIPBOARD)
 	console.log(cpb)
-	//terminal.copyClipboardFormat(Vte.FORMAT_TEXT)
 })
 
 const ncp = require('copy-paste')
@@ -222,16 +192,11 @@ const htmlExport = () =>
 
 const pdfConversion = (htmlFilename) =>
 	new Promise(async (resolve, reject) => {
-		const util = require('util')
-		const exec = require('child_process').exec
-		const spawn = require('child_process').spawn
-
 		ls = spawn(
 			'/home/epakompri/Documents/scripts/convertToMD/front/app/convertToPDF.sh',
 			[htmlFilename]
 		)
-		// the second arg is the command
-		// options
+		// the second arg is the command options
 
 		ls.stdout.on('data', function (data) {
 			// register one or more handlers
@@ -263,17 +228,6 @@ const pdfConversion = (htmlFilename) =>
 		ls.on('exit', function (code) {
 			console.log('child process exited with code ' + code)
 		})
-
-		/*const child = exec('./cleanPdf.sh out-cli.pdf out-cli.pdf', // command line argument directly in string
-		function (error, stdout, stderr) {
-			// one easy function to capture data/errors
-			
-			console.log('stdout: ' + stdout)
-			console.log('stderr: ' + stderr)
-			if (error !== null) {
-				console.log('exec error: ' + error)
-			}
-		})*/
 	})
 
 button.html.on('clicked', htmlExport)
@@ -281,20 +235,23 @@ button.html.on('clicked', htmlExport)
 button.print.on('clicked', async () => {
 	const htmlFilename = await htmlExport()
 	await pdfConversion(htmlFilename)
-})
-/*
-() => {
-	//const printOperation = WebKit2.printOperationNew(webView)
-	const code = 'window.print()'
 
-	webView.runJavascript(code, null, () => {}, {})
-})*/
+	/*
+	() => {
+		//const printOperation = WebKit2.printOperationNew(webView)
+		const code = 'window.print()'
+
+		webView.runJavascript(code, null, () => {}, {})
+	})*/
+})
 
 button.newImage.on('clicked', () => {
-	getFilename((newFilename) => {
+	//require to be in write mode
+
+	getFreeFilename((newFilename) => {
 		console.log(newFilename)
 
-		let esc = `![sketch](${path.basename(newFilename)})`
+		let esc = `![](${path.basename(newFilename)})`
 		esc = Array.from(esc).reduce((sum, e, id) => {
 			sum.push(esc.charCodeAt(id))
 			return sum
@@ -303,7 +260,7 @@ button.newImage.on('clicked', () => {
 		terminal.feedChildBinary(esc, esc.length)
 
 		fs.copyFile(
-			__dirname + '/empty.png',
+			__dirname + '/front/images/empty.png',
 			newFilename,
 			(err) => {
 				if (err) console.error(err)
@@ -318,7 +275,7 @@ button.newImage.on('clicked', () => {
 		)
 	})
 
-	function getFilename(cb, id = '') {
+	function getFreeFilename(cb, id = '') {
 		const formatLength = function (str) {
 			str = str.toString()
 			return '00'.slice(str.length) + str
@@ -332,11 +289,11 @@ button.newImage.on('clicked', () => {
 				path.basename(filename, path.extname(filename))
 			) +
 			'-' +
-			formatLength(now.getDate()) +
+			now.getFullYear() +
 			'-' +
 			formatLength(now.getMonth() + 1) +
 			'-' +
-			now.getFullYear() +
+			formatLength(now.getDate()) +
 			'-' +
 			formatLength(now.getHours()) +
 			':' +
@@ -345,8 +302,6 @@ button.newImage.on('clicked', () => {
 			formatLength(now.getSeconds()) +
 			(id !== '' ? '-' + id : '') +
 			'.png'
-
-		//console.log(filename)
 
 		// Check if the file exists in the current directory.
 		fs.access(newFilename, fs.constants.F_OK, (err) => {
@@ -396,36 +351,22 @@ webSettings.enablePageCache = false
  * Event handlers
  */
 
-// whenever a new page is loaded ...
-webView.on('load-changed', (loadEvent) => {
-	switch (loadEvent) {
-		case WebKit2.LoadEvent.COMMITTED:
-			// Update the URL bar with the current adress
-			//urlBar.setText(webView.getUri())
-			//button.back.setSensitive(webView.canGoBack())
-			//button.forward.setSensitive(webView.canGoForward())
-			break
-	}
-})
-
-// configure buttons actions
-//button.refresh.on('clicked', webView.reload)
-
-//console.log('before show')
-
 window.on('show', async () => {
 	// bring it on top in OSX
 	// window.setKeepAbove(true)
+
 	// This start the Gtk event loop. It is required to process user events.
 	// It doesn't return until you don't need Gtk anymore, usually on window close.
-	/*console.log('main')
-	Gtk.main()*/
+	// Gtk.main()
+
 	if (
 		autoExport === 'exportPdf' ||
 		autoExport === 'exportHtml'
 	) {
 		window.hide()
 	}
+
+	//HACK: GTK block the event loop, this hack with intervals preserve from it
 
 	let interval
 	let runMainLoop = true
@@ -435,12 +376,12 @@ window.on('show', async () => {
 		if (runMainLoop !== true) {
 			clearInterval(interval)
 		}
+
 		if (count === 0) {
 			count++
 			Gtk.mainIterationDo(false)
-			//console.log('after main')
 		}
-		//console.log('iterationfalse')
+
 		Gtk.mainIterationDo(false)
 	}, 0)
 	//	setInterval(() => console.log('interval before work'), 1500)
@@ -493,74 +434,27 @@ window.on('show', async () => {
 			if (autoExport === 'exportPdf') {
 				const htmlFilename = await htmlExport()
 				await pdfConversion(htmlFilename)
+
 				process.exit()
+			} else {
+				stack.push(['scrollTo', getPreviousScrolling()])
+
+				const code = `(async ()=>{
+					await mde.releaseStack(${JSON.stringify(
+						stack.map((e) => e)
+					)})
+				})()`
+
+				stack = []
+
+				await new Promise((resolve, reject) =>
+					webView.runJavascript(code, null, resolve, {})
+				)
 			}
-
-			stack.push(['scrollTo', getPreviousScrolling()])
-
-			const code = `(async ()=>{
-				console.log('code executed')
-				await mde.releaseStack(${JSON.stringify(
-					stack.map((e) => e)
-				)})
-
-			})()`
-
-			//console.log(code)
-
-			stack = []
-
-			await new Promise((resolve, reject) =>
-				webView.runJavascript(code, null, resolve, {})
-			)
-		})
-
-		engine.on('render', (output) => {
-			const previousScrolling = getPreviousScrolling()
-
-			lastRender = output
-			/*webView.runJavascript(
-				`navigator.userAgent`,
-				null,
-				(source, res, givenData) => {
-					//console.log(source, res, givenData)
-					//console.log(webView.runJavascriptFinish(res))
-				},
-				{}
-			)*/
-			//console.log('render end' + output.slice(0, 50))
-			//	fs.writeFileSync('../../converted/sample.html', output)
-			webView.loadHtml(
-				output +
-					`<script>window.onload = ()=>{ console.log('scrollTo'+${previousScrolling}); window.scrollTo(0, ${previousScrolling})}
-					(function(){
-let level = 0
-return Array.from(document.querySelectorAll('#content > section > div:not(#init):not([level="0"])')).map(el=>{
-	const setMarge = (lvl) =>{
-		if(lvl < 0) lvl = 0
-		el.style['margin-left'] = (parseInt(el.style['margin-left'].replace('px', '') || 0) + lvl*30) + 'px'
-	}
-
-	    const level' = parseInt((div.querySelector('h1,h2,h3,h4,h5,h6') || {tagName:'h1'}).tagName.slice(1))
-
-	if(typeof el.classList !== 'undefined' && el.classList.contains('break')){
-	}else{// if(/h[1-9]/.test(el.tagName.toLowerCase())){
-		//level = parseInt(el.tagName.toLowerCase().replace('h', '')) - 1
-		setMarge(level-0.5)
-	}else if(el.tagName.toLowerCase() === 'p' && Array.from(el.childNodes).length > 0 && typeof Array.from(el.childNodes)[0] === 'object' && typeof Array.from(el.childNodes)[0].tagName !== 'undefined' && Array.from(el.childNodes)[0].tagName.toLowerCase() === 'img'){
-                setMarge(level-1.5)
-	}else{
-		setMarge(level)
-	}
-
-})
-})()</script>`,
-				'file://' + filename
-			)
 		})
 
 		engine.on('load', async () => {
-			console.log('load fiored')
+			//console.log('load fiored')
 			console.log(engine.cmd)
 
 			const editor = '/usr/bin/nvim'
@@ -573,7 +467,7 @@ return Array.from(document.querySelectorAll('#content > section > div:not(#init)
 				['/bin/bash'],
 				GLib.SpawnFlags.DO_NOT_REAP_CHILD,
 				() => {
-					console.log('setup')
+					//console.log('setup')
 
 					//TODO : correct nvim size bug, actually not working
 					window.unmaximize()
@@ -585,45 +479,24 @@ return Array.from(document.querySelectorAll('#content > section > div:not(#init)
 			terminal.setFontScale(0.8)
 
 			webView.loadUri(
-				//	body + `</section></main></div></body></html>`,
-				//'file://' + filename
 				'file://' + __dirname + '/front/body.html'
 			)
 		})
 	}, 1000)
 	Gtk.main()
-
-	/*console.log('yeah')
-	let c = 0
-	while (c < 1) {
-		c++
-		Gtk.mainIterationDo(false)
-	}
-
-	console.log('main iteration false')
-
-	let i = setInterval(() => console.log('interval work'), 1500)
-	return
-*/
-	//await engine.listen()
 })
 
 window.on('destroy', () => {
-	console.log('destroy')
 	process.exit()
+
 	return Gtk.mainQuit()
 })
 
-// the user can't close the window if we return `true`
-window.on('delete-event', () => {
-	console.log('delete-event')
-	//terminal.feedChild(':q!\n\0', -1) //maybe one error in the code, but working ¯\_(ツ)_/¯
-	return false
-})
-
 webView.loadUri('http://localhost:3001/sample.html')
+webView.loadHtml(
+	`<p>editor is loading the file.<br>
+	If this message doesn't disapear in seconds, please restart the editor<p>`,
+	'file:///404.html'
+)
 
 window.showAll()
-
-const url = (href) =>
-	/^([a-z]{2,}):/.test(href) ? href : 'http://' + href

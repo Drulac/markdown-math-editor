@@ -37,9 +37,6 @@ yourHtmlConfig.extraPlugins = {
 	),
 }
 
-console.log(yourMdastConfig)
-console.log(yourHtmlConfig)
-
 // 4. Create a parser and use it
 const parser = zmarkdown(
 	'html',

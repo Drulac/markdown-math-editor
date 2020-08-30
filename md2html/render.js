@@ -34,6 +34,25 @@ function MakeQuerablePromise(promise) {
 	return result
 }
 
+function format(result, silent, forExport = false) {
+	if (!forExport)
+		result = result
+			.replace(
+				/^<p>&#x3C;inlined><\/p>(\n)*<h([0-9])/g,
+				'<h$2 class="inlined"'
+			)
+			.replace(/<li>\s*<p>/gm, '<li>')
+			.replace(/<\/p>\s*<\/li>/gm, '</li>')
+			.replace(/<-{5,}\>/g, '<div class="break"></div>')
+
+	if (!silent)
+		console.log(result.split('\n').slice(0, 30).join('\n'))
+
+	if (!silent) console.timeEnd('render')
+
+	return result
+}
+
 module.exports = async function (
 	content,
 	memory,
@@ -41,33 +60,12 @@ module.exports = async function (
 	body = true,
 	forExport = false
 ) {
-	//inside to catch the `silent` var
-	function format(result, forExport = false) {
-		if (!forExport)
-			result = result
-				.replace(
-					/^<p>&#x3C;inlined><\/p>(\n)*<h([0-9])/g,
-					'<h$2 class="inlined"'
-				)
-				.replace(/<li>\s*<p>/gm, '<li>')
-				.replace(/<\/p>\s*<\/li>/gm, '</li>')
-				.replace(/<-{5,}\>/g, '<div class="break"></div>')
-
-		if (!silent)
-			console.log(
-				result.split('\n').slice(0, 30).join('\n')
-			)
-
-		if (!silent) console.timeEnd('render')
-
-		return result
-	}
-
 	if (!silent) console.time('render')
 
 	if (forExport)
 		return format(
 			memory.map((e) => e.unformatedOutput).join(''),
+			silent,
 			true
 		)
 
@@ -131,7 +129,7 @@ module.exports = async function (
 
 			e = Object.assign(e, zmarkdownResult)
 			e.unformatedOutput = e.output
-			e.output = format(e.output)
+			e.output = format(e.output, silent)
 			e.output =
 				'<div id="' +
 				e.id +

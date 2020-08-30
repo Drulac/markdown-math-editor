@@ -4,7 +4,6 @@ const child_process = require('child_process')
 
 const editor = 'nv' | process.env.EDITOR || 'vi'
 
-const md5 = require('md5')
 const events = require('small-events-manager')
 const getPort = require('get-port')
 
