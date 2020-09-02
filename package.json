@@ -14,7 +14,7 @@
     "get-port": "^5.1.1",
     "md5": "^2.3.0",
     "node-gtk": "^0.4.0",
-    "rehype-lo-math": "^1.0.2",
+    "rehype-lo-math": "^1.0.3",
     "rehype-smiles": "^1.0.3",
     "remark-attr": "^0.11.1",
     "remark-change-image-paths": "^1.0.1",
