@@ -1,6 +1,6 @@
 {
   "name": "markdown-math-editor",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "markdown editor using neovim as editor with lot of features like asciiMath support",
   "main": "script.js",
   "scripts": {
