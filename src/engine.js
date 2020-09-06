@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const child_process = require('child_process')
+const net = require('net')
 
 const editor = 'nv' | process.env.EDITOR || 'vi'
 
@@ -55,7 +55,7 @@ module.exports = (filename, s = false) => {
 
 		const childFilename = path.resolve(
 			__dirname,
-			'../neovim-hook-handler.js'
+			'./neovim-hook-handler.js'
 		)
 
 		const cmd =
@@ -141,7 +141,6 @@ module.exports = (filename, s = false) => {
 			return await render('', memory, silent, true, true)
 		}
 
-		const net = require('net')
 		const server = net.createServer((c) => {
 			if (!silent) console.log('client connected')
 			let data = ''
@@ -188,4 +187,4 @@ module.exports = (filename, s = false) => {
 	return c
 }
 
-require('unified') //preload in node memory for first render
+//require('unified') //preload in node memory for first render

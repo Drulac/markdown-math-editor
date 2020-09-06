@@ -18,6 +18,9 @@ const Vte = gi.require('Vte')
 const GLib = gi.require('GLib')
 const WebKit2 = gi.require('WebKit2')
 
+const ncp = require('copy-paste')
+const ChildProcess = require('child_process')
+
 let engine = { exportForOtherBrowsers: () => '' }
 
 // Start the GLib event loop
@@ -133,8 +136,6 @@ button.copy.on('clicked', () => {
 	console.log(cpb)
 })
 
-const ncp = require('copy-paste')
-
 button.paste.on('clicked', async () => {
 	ncp.paste((err, esc) => {
 		//	const esc = await clipboardy.read();
@@ -175,7 +176,11 @@ const htmlExport = () =>
 		console.log(htmlFilename)
 
 		const body = fs
-			.readFileSync(__dirname + '/front/body.html', 'utf-8')
+			.readFileSync(
+				path.resolve(__dirname, '../') +
+					'/front/body.html',
+				'utf-8'
+			)
 			.toString()
 
 		const html =
@@ -260,16 +265,20 @@ button.newImage.on('clicked', () => {
 		terminal.feedChildBinary(esc, esc.length)
 
 		fs.copyFile(
-			__dirname + '/front/images/empty.png',
+			path.resolve(__dirname, '../') +
+				'/front/images/empty.png',
 			newFilename,
 			(err) => {
 				if (err) console.error(err)
 
-				const cp = require('child_process')
-				const child = cp.spawn('gimp', [newFilename], {
-					detached: true,
-					stdio: ['ignore', 'ignore', 'ignore'],
-				})
+				const child = ChildProcess.spawn(
+					'gimp',
+					[newFilename],
+					{
+						detached: true,
+						stdio: ['ignore', 'ignore', 'ignore'],
+					}
+				)
 				child.unref()
 			}
 		)
@@ -390,7 +399,7 @@ window.on('show', async () => {
 		//	console.log('before work')
 		//setInterval(() => console.log('new interval after work'), 5000)
 
-		engine = require('./md2html/engine.js')(filename, true)
+		engine = require('./engine.js')(filename, true)
 		let previousScrolling = 0
 
 		let stack = []
@@ -462,7 +471,7 @@ window.on('show', async () => {
 			terminal.spawnSync(
 				Vte.PtyFlags.DEFAULT,
 				//require('os').homedir(),
-				path.resolve(__dirname, '../'),
+				path.resolve(__dirname, '../../'),
 				[editor, filename, '--cmd', engine.cmd, '-V0'],
 				['/bin/bash'],
 				GLib.SpawnFlags.DO_NOT_REAP_CHILD,
@@ -479,7 +488,9 @@ window.on('show', async () => {
 			terminal.setFontScale(0.8)
 
 			webView.loadUri(
-				'file://' + __dirname + '/front/body.html'
+				'file://' +
+					path.resolve(__dirname, '../') +
+					'/front/body.html'
 			)
 		})
 	}, 1000)

@@ -143,3 +143,19 @@ span.mathjax {
 	display:inline-block;
 }
 
+br {
+	display: table;
+	width: 100%;
+	height: 1em;
+	content: '\A';
+}
+
+.images-row figure{
+    display: table;
+    float: left;
+}
+
+.break {
+    page-break-before: always;
+    border-top: dashed 1px lightgray;
+}

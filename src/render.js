@@ -1,6 +1,18 @@
+const path = require('path')
+
 const md5 = require('md5')
 
-const md2html = require('./zmarkdown-lo-math.js')
+const filename = path.resolve(process.argv[2])
+const imagesFolder =
+	filename.split('/').slice(0, -1).join('/') + '/'
+const smileysFolder =
+	__dirname.split('/').slice(0, -2).join('/') +
+	'/front/images/smileys/svg/'
+
+const md2html = require('mse-md2html')(
+	imagesFolder,
+	smileysFolder
+)
 
 function MakeQuerablePromise(promise) {
 	// Don't modify any promise that has been already modified.
@@ -9,13 +21,13 @@ function MakeQuerablePromise(promise) {
 	// Set initial state
 	let isPending = true
 	let isRejected = false
-	let isFulfilled = false
+	let isFullFilled = false
 	let data = undefined
 
 	// Observe the promise, saving the fulfillment in a closure scope.
 	let result = promise.then(
 		function (v) {
-			isFulfilled = true
+			isFullFilled = true
 			isPending = false
 			data = v
 			return v
@@ -27,7 +39,7 @@ function MakeQuerablePromise(promise) {
 		}
 	)
 
-	result.isFulfilled = () => isFulfilled
+	result.isFullFilled = () => isFullFilled
 	result.isPending = () => isPending
 	result.isRejected = () => isRejected
 	result.data = () => data
